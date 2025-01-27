@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Logs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/x-icon" href="images/user_logs.png">
+  </head>
+  <body>
+    <header class="p-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white flex justify-between items-center">
+      <h1 class="text-2xl font-bold">USER LOGS</h1>
+      <a
+        href="/index.html"
+        class="px-4 py-2 bg-gradient-to-r from-red-600 to-orange-700 text-white rounded-full hover:from-red-500 hover:to-orange-600 transition-transform transform hover:scale-105"
+      >
+        Back to Home
+      </a>
+    </header>
+    <main class="p-8">
+      <div class="mx-auto max-w-4xl">
+        <h2 class="text-xl font-semibold mb-4 text-slate-200">Search History</h2>
+        
+        <!-- Scrollable container for the table -->
+        <div class="overflow-x-auto max-h-96">
+          <table class="table-auto w-full text-left text-slate-100">
+            <thead class="sticky top-0 bg-slate-800 text-slate-300">
+              <tr>
+                <!-- Serial number column -->
+                <th class="px-4 py-2">#</th>
+                <th class="px-4 py-2">Song Name</th>
+                <th class="px-4 py-2">Toxicity</th>
+                <th class="px-4 py-2">Date & Time</th>
+              </tr>
+            </thead>
+            <tbody id="userLogsTable" class="bg-slate-700/60">
+              <!-- User logs will be dynamically inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+    <script>
+      // Fetch user logs from the server and populate the table
+      fetch('/get_user_logs')
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            return;
+          }
+
+          const tableBody = document.getElementById('userLogsTable');
+          data.forEach((log, index) => {
+            // Determine the text color for Song Name and Toxicity
+            const songNameClass = log.toxicity === 'Toxic' ? 'text-red-600' : 'text-green-600';
+            const toxicityClass = log.toxicity === 'Toxic' ? 'text-red-600' : 'text-green-600';
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <!-- Serial number column with vertical line after it -->
+              <td class="px-4 py-2 border-r-2 border-black">${index + 1}</td>
+              <td class="px-4 py-2 ${songNameClass} font-bold">${log.song_name}</td>
+              <td class="px-4 py-2 ${toxicityClass} font-bold">${log.toxicity}</td>
+              <td class="px-4 py-2">${log.created_at}</td>
+            `;
+            tableBody.appendChild(row);
+
+            // Add horizontal line after each row
+            const line = document.createElement('tr');
+            line.innerHTML = `
+              <td colspan="4" class="border-t-2 border-black"></td>
+            `;
+            tableBody.appendChild(line);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching user logs:', error);
+        });
+    </script>
+  </body>
+</html>

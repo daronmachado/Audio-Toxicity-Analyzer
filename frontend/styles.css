@@ -1,0 +1,24 @@
+body {
+    background: linear-gradient(to bottom, #1e3a8a, #1e40af, #1e3a8a);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    margin: 0; /* Remove any unintended margins */
+}
+
+#main-content {
+    flex: 1;
+    max-width: 100%; /* Ensure the content doesn't overflow */
+    overflow: hidden; /* Ensure no hidden content causes scrollbars */
+}
+
+header {
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in element's width */
+}
+
+header .flex {
+    flex-wrap: wrap; /* Wrap items if needed */
+    justify-content: space-between; /* Ensure proper spacing */
+}

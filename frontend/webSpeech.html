@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Speech and Analysis</title>
+  <link rel="stylesheet" href="webSpeech.css">
+  <link rel="icon" type="image/x-icon" href="images/micr.png">
+</head>
+<body>
+  <div class="container">
+    <h1>WEB SPEECH ANALYSIS</h1>
+
+    <!-- Speech Recognition Section -->
+    <section class="speech-section">
+      <button id="toggle-speech-rec-btn">🎤 Start Listening</button>
+      <p id="speech-output">Start speaking and your words will appear here...</p>
+    </section>
+
+    <!-- Perspective API Results Section -->
+    <section class="results-section">
+      <h2>Model Results</h2>
+      <p id="modelName"></p>
+      <div id="resultContent">
+        <pre><code></code></pre>
+      </div>
+    </section>
+
+    <!-- Toxicity Status Section -->
+    <section class="toxicity-section">
+      <h2>Toxicity Status</h2>
+      <div id="resultContent">
+        <pre><code><p id="toxicityStatus"></p></code></pre>
+      </div>
+    </section>
+  </div>
+
+  <script src="webspeech.js"></script>
+</body>
+</html>

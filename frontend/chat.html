@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Web</title>
+  <link rel="icon" type="image/x-icon" href="images/whatsapp.jpeg">
+  <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header" >
+      <img src="profile.png" alt="Profile">
+      <div class="header-title">Mr.Random</div>
+      <div class="status-icon">
+        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/search--v1.png" alt="Search">
+        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/menu.png" alt="Menu">
+      </div>
+    </div>
+
+    <!-- Chatbox -->
+    <div class="chat-box"></div>
+
+    <!-- Controls -->
+    <div id="selectedAudioDisplay" class="selected-audio-display"></div>
+    <div class="controls">
+      <button class="upload-btn">
+        <label for="audioFile">
+          <img src="https://img.icons8.com/material-outlined/24/000000/attach.png" alt="Upload">
+        </label>
+      </button>
+      <input type="file" id="audioFile" accept="audio/*" />
+      <div class="input-box"></div>
+      <button id="sendAudioBtn" class="send-btn">
+        <img src="https://img.icons8.com/ios-filled/50/000000/paper-plane.png" alt="Send">
+      </button>
+      <div id="loadingSpinner" class="loading"></div>
+    </div>
+  </div>
+  <script src="chat.js"></script>
+</body>
+</html>

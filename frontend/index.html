@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toxicity Analyzer</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="icon" type="image/x-icon" href="images/TA.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="absolute top-4 left-4 w-full flex justify-between items-center">
+      <div>
+        <form action="/realTimeChecker" class="inline-block">
+          <button
+            type="submit"
+            id="realTimeCheck"
+            class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-700 text-slate-100 font-medium rounded-full hover:from-blue-500 hover:to-purple-600 focus:ring-2 focus:ring-blue-400 focus:outline-none transition-transform transform hover:scale-105"
+          >
+            Real-Time Check
+          </button>
+        </form>
+        <form action="/webSpeech" class="inline-block ml-4">
+          <button
+            type="submit"
+            id="webSpeech"
+            class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-pink-700 text-slate-100 font-medium rounded-full hover:from-indigo-500 hover:to-pink-600 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition-transform transform hover:scale-105"
+          >
+            Web Speech
+          </button>
+        </form>
+      </div>
+      <div class="flex flex-wrap space-x-4 justify-end">
+        <form action="/user_logs.html" class="inline-block">
+          <button
+            type="submit"
+            id="userLogs"
+            class="px-8 py-2 bg-gradient-to-r from-green-600 to-teal-700 text-slate-100 font-medium rounded-full hover:from-green-500 hover:to-teal-600 focus:ring-2 focus:ring-green-400 focus:outline-none transition-transform transform hover:scale-105"
+          >
+            User Logs
+          </button>
+        </form>
+        <form action="/logout" class="inline-block">
+          <button
+            type="submit"
+            id="logout"
+            class="px-6 py-2 bg-gradient-to-r from-red-600 to-orange-700 text-slate-100 font-medium rounded-full hover:from-red-500 hover:to-orange-600 focus:ring-2 focus:ring-red-400 focus:outline-none transition-transform transform hover:scale-105"
+          >
+            Logout
+          </button>
+        </form>
+      </div>
+    </header>
+
+    <section
+      id="main-content"
+      class="mx-auto max-w-screen-xl px-4 py-32 lg:flex lg:items-center"
+    >
+      <div class="mx-auto max-w-3xl text-center">
+        <h1
+          class="bg-gradient-to-r from-emerald-300 via-blue-400 to-purple-500 bg-clip-text text-4xl font-extrabold text-transparent sm:text-6xl mb-8"
+        >
+          Audio Toxicity Analyzer
+          <span class="sm:block mt-2">Detect Harmful Content</span>
+        </h1>
+        <p
+          class="mx-auto mt-4 max-w-xl text-slate-300 sm:text-xl/relaxed mb-12"
+        >
+          Upload your audio file and let our AI models analyze the content for
+          potential toxic elements.
+        </p>
+        <div
+          class="card bg-slate-800/60 shadow-lg backdrop-blur-lg max-w-2xl mx-auto p-8 border border-slate-700/50 rounded-lg"
+        >
+          <form id="uploadForm" class="space-y-8">
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text text-slate-100 text-lg font-medium mb-1"
+                  >Upload Audio File</span
+                >
+              </label>
+              <input
+                type="file"
+                id="audioFile"
+                name="audioFile"
+                accept="audio/mp3"
+                required
+                class="file-input w-full bg-slate-700 border-2 border-slate-600 text-slate-100 rounded-full hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/40 transition-colors"
+              />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text text-slate-100 text-lg font-medium mb-1"
+                  >Choose Analysis Model</span
+                >
+              </label>
+              <select
+                id="model"
+                name="model"
+                required
+                class="select w-full bg-slate-700 border-2 border-slate-600 text-slate-100 rounded-full hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/40 transition-colors"
+              >
+                <option value="" disabled selected class="text-slate-400">
+                  Select a model
+                </option>
+                <option value="bert" class="text-slate-100">BERT Model</option>
+                <option value="perspective" class="text-slate-100">
+                  Perspective API
+                </option>
+              </select>
+            </div>
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+              <button
+                type="submit"
+                class="relative inline-flex items-center justify-center w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-700 text-slate-100 font-medium rounded-full hover:from-blue-500 hover:to-purple-600 focus:ring-2 focus:ring-blue-400 focus:outline-none transition-transform transform hover:scale-105"
+              >
+                Analyze Audio
+              </button>
+            </div>
+          </form>
+          <div id="results" class="mt-8">
+            <div id="loading" class="hidden">
+              <div class="flex items-center justify-center">
+                <span
+                  class="loading loading-spinner loading-lg text-blue-400"
+                ></span>
+              </div>
+            </div>
+
+            <div id="resultContent" class="hidden grid gap-6">
+              <div
+                class="mockup-code bg-slate-800 border border-slate-600 text-slate-100 rounded-lg overflow-auto h-72 max-w-full"
+              >
+                <h2 class="p-4 font-bold text-lg bg-slate-700/40" id="modelName">
+                  BERT RESULTS
+                </h2>
+                <pre><code></code></pre>
+              </div>
+
+              <div
+                class="mockup-code bg-slate-800 border border-slate-600 text-slate-100 rounded-lg overflow-auto h-72 max-w-full"
+              >
+                <h2 class="p-4 font-bold text-lg bg-slate-700/40">
+                  TRANSCRIBED TEXT
+                </h2>
+                <pre><code id="transcribedText" class="p-4 whitespace-pre-wrap break-words overflow-auto"></code></pre>
+              </div>
+
+              <div
+                class="mockup-code bg-slate-800 border border-slate-600 text-slate-100 rounded-lg overflow-auto h-72 max-w-full"
+              >
+                <h2 class="p-4 font-bold text-lg bg-slate-700/40">
+                  TOXIC WORDS
+                </h2>
+                <pre><code id="toxicWords" class="p-4 whitespace-pre-wrap break-words overflow-auto"></code></pre>
+              </div>
+
+              <div
+                class="mockup-code bg-slate-800 border border-slate-600 text-slate-100 rounded-lg overflow-auto h-72 max-w-full"
+              >
+                <h2 class="p-4 font-bold text-lg bg-slate-700/40">
+                  TOXICITY STATUS
+                </h2>
+                <pre><code id="toxicityStatus" class="p-4 text-center text-xl font-semibold whitespace-pre-wrap break-words overflow-auto"></code></pre>
+              </div>
+
+              <canvas id="pieChart" width="400" height="400"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+  <script src="script.js"></script>
+</html>
